@@ -1,0 +1,7 @@
+{
+  "name": "eCommerceApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
