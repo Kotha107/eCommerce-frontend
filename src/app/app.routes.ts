@@ -10,4 +10,8 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'upload',
+    loadComponent: () => import('./pages/upload/upload.page').then( m => m.UploadPage)
+  },
 ];
