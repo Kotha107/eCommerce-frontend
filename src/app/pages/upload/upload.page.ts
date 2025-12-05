@@ -1,17 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import {
-  FormBuilder,
   FormGroup,
-  FormsModule,
   Validators,
+  FormBuilder,
+  FormsModule,
 } from '@angular/forms';
 import {
-  IonContent,
-  IonHeader,
   IonTitle,
+  IonHeader,
+  IonContent,
   IonToolbar,
 } from '@ionic/angular/standalone';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
 import { HttpClientService } from 'src/app/services/http-service/http-client.service';
 
 @Component({
@@ -20,9 +20,9 @@ import { HttpClientService } from 'src/app/services/http-service/http-client.ser
   styleUrls: ['./upload.page.scss'],
   standalone: true,
   imports: [
-    IonContent,
-    IonHeader,
     IonTitle,
+    IonHeader,
+    IonContent,
     IonToolbar,
     FormsModule,
     ReactiveFormsModule,
@@ -30,10 +30,11 @@ import { HttpClientService } from 'src/app/services/http-service/http-client.ser
 })
 export class UploadPage implements OnInit {
   private fb = inject(FormBuilder);
-  private httpservice = inject(HttpClientService);
+  private http = inject(HttpClientService);
 
-  productForm: FormGroup;
   loading = false;
+  productForm: FormGroup;
+  imageUrl!: string;
   selectedFile: File | null = null;
 
   constructor() {
@@ -44,34 +45,29 @@ export class UploadPage implements OnInit {
       description: [''],
     });
   }
-  ngOnInit(): void {}
+  ngOnInit() {}
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  async upload() {
+  upload() {
     if (!this.selectedFile) return;
     this.loading = true;
 
-    try {
-      const response = await this.httpservice.uploadImage(this.selectedFile);
-      const imageUrl = response?.data?.imageUrl;
-      console.log("response from uploadImage:", response);
-      console.log("Image uploaded at URL:", imageUrl);
+    this.http.uploadImage(this.selectedFile).subscribe((res) => {
+      this.imageUrl = res.data.imageUrl;
 
-      if (imageUrl) {
-        console.log("Image uploaded at URL:", imageUrl);
-        const productData = { ...this.productForm.value, imageUrl };
-        const productResp = await this.httpservice.createProduct(productData);
-        console.log("Product created:", productResp);
-      }
+      const productData = {
+        ...this.productForm.value,
+        imageUrl: this.imageUrl,
+      };
+      this.http.createProduct(productData).subscribe((res) => {
+        console.log(res);
+      });
+      this.loading = false;
       this.productForm.reset();
       this.selectedFile = null;
-    } catch (err) {
-      alert('Something went wrong!');
-    } finally {
-      this.loading = false;
-    }
+    });
   }
 }

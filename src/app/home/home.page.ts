@@ -1,5 +1,15 @@
-import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
+import { Component, inject } from '@angular/core';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+} from '@ionic/angular/standalone';
+import { HttpClientService } from '../services/http-service/http-client.service';
+import {
+  AllProductsRespModel,
+  ProductDetailsModel,
+} from 'src/models/product.model';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +18,27 @@ import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/stan
   imports: [IonHeader, IonToolbar, IonTitle, IonContent],
 })
 export class HomePage {
+  private http = inject(HttpClientService);
+
+  products: ProductDetailsModel[] = [];
   constructor() {}
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.http.allProducts().subscribe((res: AllProductsRespModel) => {
+      this.products = res.data;
+      console.log('Products loaded: ', res);
+    });
+  }
+
+  deleteProduct(prodId: string) {
+    this.http.deleteProduct(prodId).subscribe({
+      next: () => {
+        this.products = this.products.filter((prod) => prod.id !== prodId);
+        this.loadProducts();
+      },
+    });
+  }
 }

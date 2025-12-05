@@ -1,29 +1,46 @@
-import { Injectable } from '@angular/core';
-import axios from 'axios'
-import { environment } from 'src/environments/environment';
-import { ProductDetailsModel } from 'src/models/product.model';
+import axios from 'axios';
+import { inject, Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
+import {
+  ProductDetailsModel,
+  UploadProdRespModel,
+  AllProductsRespModel,
+  ProductDetailsRespModel,
+} from 'src/models/product.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpClientService {
-    async uploadImage(file: File) {
+  private http = inject(HttpClient);
+
+  uploadImage(file: File): Observable<UploadProdRespModel> {
     const form = new FormData();
-    form.append("image", file);
+    form.append('image', file);
 
-    const res = await axios.post(`${environment.BASE_URL}/upload`, form);
-    return res.data;  
+    return this.http.post<UploadProdRespModel>(
+      `${environment.BASE_URL}/upload`,
+      form
+    );
   }
 
-  async createProduct(product: ProductDetailsModel) {
-    const res = await axios.post(`${environment.BASE_URL}/products`, product);
-    console.log("createProduct response:", res.data);
-    return res.data;
+  createProduct(
+    product: ProductDetailsModel
+  ): Observable<ProductDetailsRespModel> {
+    return this.http.post<ProductDetailsRespModel>(
+      `${environment.BASE_URL}/products`,
+      product
+    );
   }
 
-  async allProducts() {
-    const res = await axios.get(`${environment.BASE_URL}/products`);
-    return res.data.data;
+  allProducts(): Observable<AllProductsRespModel> {
+    return this.http.get<AllProductsRespModel>(
+      `${environment.BASE_URL}/products`
+    );
   }
-  
+  deleteProduct(id: string) {
+    return this.http.delete(`${environment.BASE_URL}/products/${id}`);
+  }
 }

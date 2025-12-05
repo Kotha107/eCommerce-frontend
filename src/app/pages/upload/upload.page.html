@@ -1,9 +1,7 @@
 <div class="p-5 space-y-5">
-
   <h1 class="text-xl font-bold">Create Product</h1>
 
   <form [formGroup]="productForm" (submit)="upload()" class="space-y-4">
-
     <input
       formControlName="name"
       type="text"
@@ -46,6 +44,5 @@
     >
       {{ loading ? 'Uploading...' : 'Create Product' }}
     </button>
-
   </form>
 </div>
