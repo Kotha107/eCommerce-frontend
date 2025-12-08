@@ -3,12 +3,13 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import {
   ProductDetailsModel,
-  UploadProdRespModel,
-  AllProductsRespModel,
-  ProductDetailsRespModel,
+  UploadProductResponseModel,
+  ProductDetailsResponseModel,
+  AllProductsResponseModel,
 } from 'src/models/product.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiEndPoint } from './endPoints';
 
 @Injectable({
   providedIn: 'root',
@@ -16,31 +17,31 @@ import { Observable } from 'rxjs';
 export class HttpClientService {
   private http = inject(HttpClient);
 
-  uploadImage(file: File): Observable<UploadProdRespModel> {
+  uploadImage =(file: File): Observable<UploadProductResponseModel> =>{
     const form = new FormData();
     form.append('image', file);
 
-    return this.http.post<UploadProdRespModel>(
-      `${environment.BASE_URL}/upload`,
+    return this.http.post<UploadProductResponseModel>(
+      ApiEndPoint.upload,
       form
     );
   }
 
-  createProduct(
+  createProduct = (
     product: ProductDetailsModel
-  ): Observable<ProductDetailsRespModel> {
-    return this.http.post<ProductDetailsRespModel>(
-      `${environment.BASE_URL}/products`,
+  ): Observable<ProductDetailsResponseModel>=> {
+    return this.http.post<ProductDetailsResponseModel>(
+      ApiEndPoint.product,
       product
     );
   }
 
-  allProducts(): Observable<AllProductsRespModel> {
-    return this.http.get<AllProductsRespModel>(
-      `${environment.BASE_URL}/products`
+  allProducts = (): Observable<AllProductsResponseModel> => {
+    return this.http.get<AllProductsResponseModel>(
+      ApiEndPoint.product
     );
   }
-  deleteProduct(id: string) {
-    return this.http.delete(`${environment.BASE_URL}/products/${id}`);
+  deleteProduct =(id: string)=> {
+    return this.http.delete(`${ApiEndPoint.product}/${id}`);
   }
 }

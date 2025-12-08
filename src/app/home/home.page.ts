@@ -7,7 +7,7 @@ import {
 } from '@ionic/angular/standalone';
 import { HttpClientService } from '../services/http-service/http-client.service';
 import {
-  AllProductsRespModel,
+  AllProductsResponseModel,
   ProductDetailsModel,
 } from 'src/models/product.model';
 
@@ -27,7 +27,7 @@ export class HomePage {
   }
 
   loadProducts() {
-    this.http.allProducts().subscribe((res: AllProductsRespModel) => {
+    this.http.allProducts().subscribe((res: AllProductsResponseModel) => {
       this.products = res.data;
       console.log('Products loaded: ', res);
     });
