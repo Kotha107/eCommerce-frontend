@@ -1,5 +1,6 @@
 export interface ProductDetailsModel {
   id: string;
+  categoryId : string;
   name: string;
   price: number;
   category: string;
@@ -11,7 +12,11 @@ export interface ProductDetailsModel {
 export interface UploadProductResponseModel {
   success: boolean;
   message: string;
-  data: any;
+  data : {
+    categoryId :string,
+      deleteUrl:string,
+      imageUrl:string,
+  }
 }
 
 export interface ProductDetailsResponseModel {

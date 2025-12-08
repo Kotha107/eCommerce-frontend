@@ -42,6 +42,8 @@ export class HttpClientService {
     );
   }
   deleteProduct =(id: string)=> {
+    
+    console.log(`${ApiEndPoint.product}/${id}`);
     return this.http.delete(`${ApiEndPoint.product}/${id}`);
   }
 }

@@ -11,17 +11,10 @@
     @for (product of products; track $index) {
     <div class="border rounded-lg overflow-hidden shadow-sm bg-white">
       <img [src]="product.imageUrl" class="w-full h-40 object-cover" />
-      <div class="flex justify-between items-center">
-        <div class="p-2">
+      <div class="">
+        <div class="p-3 flex justify-between items-center">
           <h2 class="text-base font-semibold truncate">{{ product.name }}</h2>
           <p class="text-gray-600 text-sm">Price: {{ product.price }}</p>
-        </div>
-        <div>
-          <img
-            src="../../assets/icon/trash-delete-bin.svg"
-            class="w-5 h-5 m-2 cursor-pointer"
-            (click)="deleteProduct(product.id)"
-          />
         </div>
       </div>
     </div>

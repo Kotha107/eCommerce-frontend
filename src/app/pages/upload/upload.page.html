@@ -1,7 +1,9 @@
 <div class="p-5 space-y-5">
   <h1 class="text-xl font-bold">Create Product</h1>
 
-  <form [formGroup]="productForm" (submit)="upload()" class="space-y-4">
+  <form [formGroup]="productForm" (ngSubmit)="upload()" class="space-y-4">
+
+    <!-- Product Name -->
     <input
       formControlName="name"
       type="text"
@@ -9,6 +11,7 @@
       placeholder="Product Name"
     />
 
+    <!-- Price -->
     <input
       formControlName="price"
       type="number"
@@ -16,13 +19,15 @@
       placeholder="Price"
     />
 
+    <!-- Category -->
     <input
-      formControlName="category"
+      formControlName="categoryName"
       type="text"
       class="w-full p-2 border rounded"
       placeholder="Category"
     />
 
+    <!-- Description -->
     <textarea
       formControlName="description"
       class="w-full p-2 border rounded"
@@ -45,4 +50,28 @@
       {{ loading ? 'Uploading...' : 'Create Product' }}
     </button>
   </form>
+
+  <!-- Uploaded Images Preview -->
+    <div
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4"
+  >
+    @for (product of products; track $index) {
+    <div class="border rounded-lg overflow-hidden shadow-sm bg-white">
+      <img [src]="product.imageUrl" class="w-full h-40 object-cover" />
+      <div class="flex justify-between items-center">
+        <div class="p-2">
+          <h2 class="text-base font-semibold truncate">{{ product.name }}</h2>
+          <p class="text-gray-600 text-sm">Price: {{ product.price }}</p>
+        </div>
+        <div>
+          <img
+            src="../../assets/icon/trash-delete-bin.svg"
+            class="w-5 h-5 m-2 cursor-pointer"
+            (click)="deleteProduct(product.id)"
+          />
+        </div>
+      </div>
+    </div>
+    }
+  </div>
 </div>
