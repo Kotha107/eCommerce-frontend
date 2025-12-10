@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ product?.name }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon  name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="p-4">
+
+  <img
+    [src]="product?.imageUrl"
+    class="w-full h-60 object-cover rounded-lg mb-4"
+/>
+
+  <h2 class="text-xl font-semibold mb-2 p-3">
+    Name : {{ product?.name }}
+  </h2>
+
+  <p class="text-xl font-semibold mb-4 p-3">
+    Description : {{ product?.description }}
+  </p>
+
+  <p class="text-xl font-semibold p-3">
+    Price: {{ product?.price }} ৳
+  </p>
+
+</ion-content>

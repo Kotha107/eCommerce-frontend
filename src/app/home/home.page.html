@@ -9,7 +9,7 @@
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4"
   >
     @for (product of products; track $index) {
-    <div class="border rounded-lg overflow-hidden shadow-sm bg-white">
+    <div class="border rounded-lg overflow-hidden shadow-sm bg-white" (click)="openProductModal(product)">
       <img [src]="product.imageUrl" class="w-full h-40 object-cover" />
       <div class="">
         <div class="p-3 flex justify-between items-center">

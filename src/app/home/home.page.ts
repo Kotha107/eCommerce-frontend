@@ -4,12 +4,14 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { HttpClientService } from '../services/http-service/http-client.service';
 import {
   AllProductsResponseModel,
   ProductDetailsModel,
 } from 'src/models/product.model';
+import { ProductModalComponent } from '../components/product/product-modal/product-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +21,7 @@ import {
 })
 export class HomePage {
   private http = inject(HttpClientService);
+  private modalCtrl = inject(ModalController);
 
   products: ProductDetailsModel[] = [];
   constructor() {}
@@ -40,5 +43,17 @@ export class HomePage {
         this.loadProducts();
       },
     });
+  }
+
+    async openProductModal(product: any) {
+    const modal = await this.modalCtrl.create({
+      component: ProductModalComponent,
+      componentProps: {
+        product: product
+      },
+      cssClass: 'product-modal'
+    });
+
+    await modal.present();
   }
 }
