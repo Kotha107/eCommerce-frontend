@@ -1,0 +1,39 @@
+<div class="panel-content">
+  
+  <div class="header">
+    @if(mode === 'cart') {
+      <h2 class="title">Your Cart</h2>
+    } 
+    @if(mode === 'upload') {
+      <h2 class="title">Upload Product</h2>
+    }
+    
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+
+  @if(mode === 'upload') {
+    <div class="p-4">
+      <ng-content></ng-content>
+    </div>
+  }
+
+  @if(mode === 'cart') {
+    <div class="cart-list">
+      @if((cartItems | async)?.length === 0) {
+        <div class="text-center text-gray-500 mt-10">
+          <p>Your cart is empty.</p>
+        </div>
+      }
+
+      @for (item of cartItems | async; track $index) {
+        <div class="cart-item">
+          <img [src]="item.imageUrl" alt="product" />
+          <div class="item-details">
+            <h3>{{ item.name }}</h3>
+            <p>৳ {{ item.price }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

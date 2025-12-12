@@ -1,7 +1,40 @@
-<div class="p-5 space-y-5">
-  <h1 class="text-xl font-bold">Create Product</h1>
+<div class="w-full p-6 flex">
 
-  <form [formGroup]="productForm" (ngSubmit)="upload()" class="space-y-4">
+  
+  <!-- PRODUCT LIST -->
+  <div class="mt-8 flex-1">
+    <h2 class="text-xl font-semibold mb-3">Products</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      @for (product of products; track $index) {
+        <div class="border rounded-lg overflow-hidden shadow bg-white">
+
+          <img [src]="product.imageUrl" class="w-full h-40 object-cover" />
+
+          <div class="flex justify-between items-center">
+            <div class="p-2">
+              <h2 class="text-base font-semibold truncate">{{ product.name }}</h2>
+              <p class="text-gray-600 text-sm">Price: {{ product.price }}</p>
+            </div>
+
+            <img
+              src="../../assets/icon/trash-delete-bin.svg"
+              class="w-5 h-5 m-2 cursor-pointer"
+              (click)="deleteProduct(product.id)"
+            />
+          </div>
+
+        </div>
+      }
+    </div>
+  </div>
+
+ 
+    <div class=" w-1/5">
+  <!-- PRODUCT FORM -->
+   <app-right-side-panel mode="upload">
+     <h1 class="text-2xl font-bold mb-4">Create Product</h1>
+  <form [formGroup]="productForm" (submit)="upload()" class="space-y-4 bg-white p-5 rounded shadow">
 
     <!-- Product Name -->
     <input
@@ -45,33 +78,13 @@
     <button
       type="submit"
       [disabled]="loading || !productForm.valid"
-      class="w-full bg-blue-600 text-white py-2 rounded disabled:bg-gray-400"
+      class="w-full bg-green-600 text-white py-2 rounded disabled:bg-gray-400"
     >
       {{ loading ? 'Uploading...' : 'Create Product' }}
     </button>
   </form>
-
-  <!-- Uploaded Images Preview -->
-    <div
-    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4"
-  >
-    @for (product of products; track $index) {
-    <div class="border rounded-lg overflow-hidden shadow-sm bg-white">
-      <img [src]="product.imageUrl" class="w-full h-40 object-cover" />
-      <div class="flex justify-between items-center">
-        <div class="p-2">
-          <h2 class="text-base font-semibold truncate">{{ product.name }}</h2>
-          <p class="text-gray-600 text-sm">Price: {{ product.price }}</p>
-        </div>
-        <div>
-          <img
-            src="../../assets/icon/trash-delete-bin.svg"
-            class="w-5 h-5 m-2 cursor-pointer"
-            (click)="deleteProduct(product.id)"
-          />
-        </div>
-      </div>
+</app-right-side-panel>
     </div>
-    }
-  </div>
+
+
 </div>

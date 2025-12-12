@@ -49,3 +49,61 @@
   --background: #f8f9fa;
   --border-color: #dee2e6;
 }
+
+.layout {
+  display: flex;
+  height: 100vh;
+  background: #f6f7fb;
+}
+
+/* LEFT SIDEBAR */
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #eaeaea;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.sidebar .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar .menu button {
+  width: 100%;
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: left;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar .menu button:hover {
+  background: #e2ffe4;
+}
+
+.sidebar .menu .active {
+  background: #28c76f;
+  color: white;
+}
+
+/* MAIN CONTENT */
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}

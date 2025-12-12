@@ -15,6 +15,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HttpClientService } from 'src/app/services/http-service/http-client.service';
 import { AllProductsResponseModel, ProductDetailsModel } from 'src/models/product.model';
 import { CategoryModel } from 'src/models/category.model';
+import { RightSidePanelComponent } from 'src/app/components/right-side-panel/right-side-panel.component';
 
 @Component({
   selector: 'app-upload',
@@ -22,12 +23,9 @@ import { CategoryModel } from 'src/models/category.model';
   styleUrls: ['./upload.page.scss'],
   standalone: true,
   imports: [
-    IonTitle,
-    IonHeader,
-    IonContent,
-    IonToolbar,
     FormsModule,
     ReactiveFormsModule,
+    RightSidePanelComponent,
   ],
 })
 export class UploadPage implements OnInit {
@@ -95,7 +93,7 @@ export class UploadPage implements OnInit {
     });
   }
   loadCategories(){
-    
+
   };
   
 }

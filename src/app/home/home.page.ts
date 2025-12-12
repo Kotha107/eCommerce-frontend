@@ -1,25 +1,36 @@
 import { Component, inject } from '@angular/core';
 import {
+  IonTitle,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   ModalController,
+  IonButtons,
+  IonButton,
 } from '@ionic/angular/standalone';
+
+import { CartService } from '../services/cartService/cart.service';
 import { HttpClientService } from '../services/http-service/http-client.service';
-import {
-  AllProductsResponseModel,
-  ProductDetailsModel,
-} from 'src/models/product.model';
+import {AllProductsResponseModel, ProductDetailsModel,} from 'src/models/product.model';
 import { ProductModalComponent } from '../components/product/product-modal/product-modal.component';
+import { RightSidePanelComponent } from '../components/right-side-panel/right-side-panel.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent],
+  imports: [
+    IonTitle,
+    IonHeader,
+    IonToolbar,
+    IonContent,
+    IonButtons,
+    IonButton,
+    RightSidePanelComponent,
+  ],
 })
 export class HomePage {
+  cartService = inject(CartService);
   private http = inject(HttpClientService);
   private modalCtrl = inject(ModalController);
 
@@ -45,15 +56,19 @@ export class HomePage {
     });
   }
 
-    async openProductModal(product: any) {
+  async openProductModal(product: any) {
     const modal = await this.modalCtrl.create({
       component: ProductModalComponent,
       componentProps: {
-        product: product
+        product: product,
       },
-      cssClass: 'product-modal'
+      cssClass: 'product-modal',
     });
 
     await modal.present();
+  }
+
+  addToCart(product: any) {
+    this.cartService.addCartItem(product);
   }
 }
