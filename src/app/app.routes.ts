@@ -14,4 +14,8 @@ export const routes: Routes = [
     path: 'upload',
     loadComponent: () => import('./pages/upload/upload.page').then( m => m.UploadPage)
   },
+  {
+    path: 'category',
+    loadComponent: () => import('./pages/category/category.page').then( m => m.CategoryPage)
+  },
 ];

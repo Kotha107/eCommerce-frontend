@@ -42,8 +42,19 @@ export class HttpClientService {
     );
   }
   deleteProduct =(id: string)=> {
-    
+
     console.log(`${ApiEndPoint.product}/${id}`);
     return this.http.delete(`${ApiEndPoint.product}/${id}`);
+  }
+
+  createCategory = (categoryName: string) => {
+    return this.http.post(`${ApiEndPoint.createCategory}`, { name: categoryName });
+  }
+
+  allCategories = () => {
+    return this.http.get(`${ApiEndPoint.allCategories}`);
+  }
+  deleteCategory = (id: string) => {
+    return this.http.delete(`${ApiEndPoint.deleteCategory}/${id}`);
   }
 }

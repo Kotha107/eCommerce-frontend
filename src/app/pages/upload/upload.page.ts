@@ -71,8 +71,9 @@ export class UploadPage implements OnInit {
 
       this.http.createProduct(productData).subscribe((res) => {
         console.log(res);
+        this.loadProducts();
       });
-      this.loadProducts();
+      
       this.loading = false;
       this.productForm.reset();
       this.selectedFile = null;

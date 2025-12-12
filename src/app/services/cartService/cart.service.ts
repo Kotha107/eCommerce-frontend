@@ -23,11 +23,16 @@ export class CartService {
   }
 
   removeCartItem(product: ProductDetailsModel) {
-    const currentItems = this.cartItems.value;
-    this.cartItems.next(currentItems.filter(cartItem => cartItem.id !== product.id));
+    const currentItems = [...this.cartItems.value]; 
+    const index = currentItems.findIndex((item) => item.id === product.id);
+
+    if (index > -1) {
+      currentItems.splice(index, 1);
+      this.cartItems.next(currentItems);
+    }
   }
 
-   clearCart() {
+  clearCart() {
     this.cartItems.next([]);
   }
 

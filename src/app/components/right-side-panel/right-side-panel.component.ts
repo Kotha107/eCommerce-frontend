@@ -8,6 +8,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { CartService } from 'src/app/services/cartService/cart.service';
+import { ProductDetailsModel } from 'src/models/product.model';
 
 @Component({
   standalone: true,
@@ -36,5 +37,9 @@ export class RightSidePanelComponent implements OnInit {
 
   close() {
     this.cartService.closePanel();
+  }
+
+  removeItem(item: ProductDetailsModel) {
+    this.cartService.removeCartItem(item);
   }
 }
