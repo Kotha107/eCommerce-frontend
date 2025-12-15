@@ -1,42 +1,85 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Products</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cartService.togglePanel()">
-        Cart
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content [scrollY]="false">
+  <div class="main-layout flex h-full w-full bg-[#f8f9fa]">
+    <div
+      class="content-area flex-1 flex flex-col h-full overflow-hidden relative"
+    >
+      <div class="p-6 pb-2">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800">Choose Category</h1>
+            <p class="text-gray-500">Select categories from below</p>
+          </div>
+        </div>
 
-<ion-content [scrollY]="false"> 
-  <div class="main-layout h-full flex w-full">
-    
-    <div class="content-area flex-1 overflow-y-auto p-4 bg-gray-50">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        
-        @for (product of products; track $index) {
-          <div class="product-card border rounded-lg overflow-hidden shadow-sm bg-white flex flex-col">
-            <div class="relative h-40 overflow-hidden cursor-pointer" (click)="openProductModal(product)">
-              <img [src]="product.imageUrl" class="w-full h-full object-cover transition-transform hover:scale-105" alt="{{product.name}}" />
+        <div
+          class="categories-wrapper flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
+        >
+          <div
+            class="cursor-pointer min-w-[100px] bg-[#28c76f] text-white text-center py-3 px-6 rounded-full shadow-md font-medium transition-transform hover:scale-105"
+          >
+            All
+          </div>
+
+          @for (cat of categories; track $index) {
+          <div
+            class="cursor-pointer min-w-[100px] bg-white text-gray-600 hover:bg-green-50 hover:text-[#28c76f] text-center py-3 px-6 rounded-full shadow-sm border border-gray-100 font-medium transition-all whitespace-nowrap"
+          >
+            {{ cat.name }}
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-6 pt-2">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Menu Items</h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20"
+        >
+          @for (product of products; track $index) {
+          <div
+            class="product-card group bg-white border border-gray-100 rounded-[30px] p-4 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center relative"
+          >
+            <div
+              class="relative w-full h-48  mb-4 overflow-hidden rounded-xl group-hover:scale-[1.02] transition-transform duration-300"
+              (click)="openProductModal(product)"
+            >
+              <img
+                [src]="product.imageUrl"
+                class="w-full h-full object-cover"
+                alt="{{product.name}}"
+              />
             </div>
 
-            <div class="p-3 flex flex-col flex-grow justify-between">
-              <div class="flex justify-between">
-                <h2 class="text-base font-semibold truncate" title="{{ product.name }}">{{ product.name }}</h2>
-                <p class="text-gray-600 text-sm font-medium">৳ {{ product.price }}</p>
-              </div>
+            <div class="w-full flex flex-col flex-grow items-center">
+              <h2
+                class="text-lg font-bold text-gray-800 mb-1 line-clamp-1"
+                title="{{ product.name }}"
+              >
+                {{ product.name }}
+              </h2>
 
-              <button (click)="addToCart(product)" class="add-btn mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200 flex items-center justify-center gap-2">
+              <p class="text-[#28c76f] text-xl font-bold mb-4">
+                ৳ {{ product.price }}
+              </p>
+
+              <button
+                (click)="addToCart(product)"
+                class="mt-auto bg-[#eafbf2] text-[#28c76f] hover:bg-[#28c76f] hover:text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 flex items-center gap-2"
+              >
                 <span>Add to Cart</span>
               </button>
             </div>
           </div>
-        }
-
+          }
+        </div>
       </div>
     </div>
 
-    <app-right-side-panel mode="cart"></app-right-side-panel>
+    <div
+      class="right-panel-wrapper w-[350px] h-full bg-white shadow-[-5px_0_15px_rgba(0,0,0,0.05)] z-20"
+    >
+      <app-right-side-panel mode="cart"></app-right-side-panel>
+    </div>
   </div>
 </ion-content>

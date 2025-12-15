@@ -10,6 +10,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiEndPoint } from './endPoints';
+import { AllCategoriesResponseModel, CategoryModel, CategoryResponseModel } from 'src/models/category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,17 +43,15 @@ export class HttpClientService {
     );
   }
   deleteProduct =(id: string)=> {
-
-    console.log(`${ApiEndPoint.product}/${id}`);
     return this.http.delete(`${ApiEndPoint.product}/${id}`);
   }
 
-  createCategory = (categoryName: string) => {
-    return this.http.post(`${ApiEndPoint.createCategory}`, { name: categoryName });
+  createCategory = (category: CategoryModel):Observable<CategoryResponseModel> => {
+    return this.http.post<CategoryResponseModel>(`${ApiEndPoint.createCategory}`, category);
   }
 
-  allCategories = () => {
-    return this.http.get(`${ApiEndPoint.allCategories}`);
+  allCategories = () : Observable<AllCategoriesResponseModel> => {
+    return this.http.get<AllCategoriesResponseModel>(`${ApiEndPoint.allCategories}`);
   }
   deleteCategory = (id: string) => {
     return this.http.delete(`${ApiEndPoint.deleteCategory}/${id}`);

@@ -8,6 +8,7 @@
   overflow: hidden;
   flex-shrink: 0; 
   z-index: 10;
+  border-radius: 20px;
 }
 
 :host(.panel-open) {
@@ -69,7 +70,7 @@
   background: #fff;
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #28c76f;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   transition: transform 0.2s;
 

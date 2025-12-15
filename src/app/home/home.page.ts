@@ -14,6 +14,7 @@ import { HttpClientService } from '../services/http-service/http-client.service'
 import {AllProductsResponseModel, ProductDetailsModel,} from 'src/models/product.model';
 import { ProductModalComponent } from '../components/product/product-modal/product-modal.component';
 import { RightSidePanelComponent } from '../components/right-side-panel/right-side-panel.component';
+import { CategoryModel } from 'src/models/category.model';
 
 @Component({
   selector: 'app-home',
@@ -35,15 +36,22 @@ export class HomePage {
   private modalCtrl = inject(ModalController);
 
   products: ProductDetailsModel[] = [];
+  categories: CategoryModel[] = [];
   constructor() {}
   ngOnInit() {
     this.loadProducts();
+    this.loadCategories();
   }
 
   loadProducts() {
     this.http.allProducts().subscribe((res: AllProductsResponseModel) => {
       this.products = res.data;
       console.log('Products loaded: ', res);
+    });
+  }
+  loadCategories() {
+    this.http.allCategories().subscribe((res) => {
+      this.categories = res.data;
     });
   }
 

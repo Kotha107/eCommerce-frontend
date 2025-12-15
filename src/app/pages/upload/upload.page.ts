@@ -16,6 +16,8 @@ import { HttpClientService } from 'src/app/services/http-service/http-client.ser
 import { AllProductsResponseModel, ProductDetailsModel } from 'src/models/product.model';
 import { CategoryModel } from 'src/models/category.model';
 import { RightSidePanelComponent } from 'src/app/components/right-side-panel/right-side-panel.component';
+import { MatFormField } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-upload',
@@ -26,7 +28,8 @@ import { RightSidePanelComponent } from 'src/app/components/right-side-panel/rig
     FormsModule,
     ReactiveFormsModule,
     RightSidePanelComponent,
-  ],
+    MatFormField
+],
 })
 export class UploadPage implements OnInit {
   private fb = inject(FormBuilder);
@@ -70,7 +73,6 @@ export class UploadPage implements OnInit {
       };
 
       this.http.createProduct(productData).subscribe((res) => {
-        console.log(res);
         this.loadProducts();
       });
       
@@ -94,6 +96,9 @@ export class UploadPage implements OnInit {
     });
   }
   loadCategories(){
+    this.http.allCategories().subscribe((res)=>{
+      this.categories=res.data
+    })
 
   };
   

@@ -23,7 +23,6 @@ import { CartService } from 'src/app/services/cartService/cart.service';
     IonToolbar,
     IonContent,
     IonButtons,
-    RightSidePanelComponent,
   ],
   templateUrl: './product-modal.component.html',
   styleUrls: ['./product-modal.component.scss'],

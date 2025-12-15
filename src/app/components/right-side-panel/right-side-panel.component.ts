@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
 import {
   Component,
   HostBinding,
@@ -15,7 +15,7 @@ import { ProductDetailsModel } from 'src/models/product.model';
   selector: 'app-right-side-panel',
   templateUrl: './right-side-panel.component.html',
   styleUrls: ['./right-side-panel.component.scss'],
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, DecimalPipe],
 })
 export class RightSidePanelComponent implements OnInit {
   cartService = inject(CartService);
@@ -24,6 +24,8 @@ export class RightSidePanelComponent implements OnInit {
 
   cartItems = this.cartService.getCartItems();
   isOpen = this.cartService.getPanelState();
+
+  totalAmount = this.cartService.getTotalAmount();
 
   constructor() {}
 
