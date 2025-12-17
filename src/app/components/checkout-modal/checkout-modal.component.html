@@ -1,0 +1,59 @@
+<div class="p-4 space-y-4 mt-10">
+  <h2 class="text-xl text-[#28c76f] font-bold">Checkout</h2>
+
+  <form [formGroup]="checkoutForm" class="space-y-3">
+    <input
+      type="text"
+      formControlName="name"
+      placeholder="Customer Name"
+      class="w-full p-2 border rounded-3xl"
+      [disabled]="isProcessing"
+    />
+
+    <input
+      type="text"
+      formControlName="phone"
+      placeholder="Phone (optional)"
+      class="w-full p-2 border rounded-3xl"
+      [disabled]="isProcessing"
+    />
+
+    <div class="border-t pt-3">
+      <p class="font-semibold text-[#28c76f]">Total: ৳ {{ totalAmount | number : "1.0-0" }}</p>
+
+      <input
+        type="number"
+        formControlName="cashGiven"
+        placeholder="Cash Given"
+        class="w-full p-2 border rounded-3xl mt-2"
+        [disabled]="isProcessing"
+      />
+
+      @if((checkoutForm.value.cashGiven || 0) >= totalAmount) {
+      <p class="text-green-600 mt-2">
+        Change: ৳ {{ changeAmount | number : "1.0-0" }}
+      </p>
+      }
+    </div>
+
+    <div class="flex gap-3 pt-4">
+      <button
+        type="button"
+        class="flex-1 border py-2 rounded-3xl"
+        (click)="close()"
+        [disabled]="isProcessing"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="flex-1 bg-green-600 text-white py-2 rounded-3xl disabled:bg-gray-400"
+        (click)="confirmSale()"
+        [disabled]="isProcessing"
+      >
+        {{ isProcessing ? 'Processing...' : 'Confirm' }}
+      </button>
+    </div>
+  </form>
+</div>

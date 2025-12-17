@@ -4,12 +4,6 @@ import {
   FormBuilder,
   FormsModule,
 } from '@angular/forms';
-import {
-  IonTitle,
-  IonHeader,
-  IonContent,
-  IonToolbar,
-} from '@ionic/angular/standalone';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpClientService } from 'src/app/services/http-service/http-client.service';
@@ -17,6 +11,7 @@ import { AllProductsResponseModel, ProductDetailsModel } from 'src/models/produc
 import { CategoryModel } from 'src/models/category.model';
 import { RightSidePanelComponent } from 'src/app/components/right-side-panel/right-side-panel.component';
 import { MatFormField } from '@angular/material/input';
+import { IonicModule } from '@ionic/angular';
 
 
 @Component({
@@ -28,7 +23,8 @@ import { MatFormField } from '@angular/material/input';
     FormsModule,
     ReactiveFormsModule,
     RightSidePanelComponent,
-    MatFormField
+    MatFormField,
+    IonicModule, 
 ],
 })
 export class UploadPage implements OnInit {
@@ -101,5 +97,13 @@ export class UploadPage implements OnInit {
     })
 
   };
+  deleteCategory(id: string){
+    this.http.deleteCategory(id).subscribe({
+      next:()=>{
+        this.categories=this.categories.filter(cat=>cat.id!==id);
+        this.loadCategories();
+      }
+    })
+  }
   
 }

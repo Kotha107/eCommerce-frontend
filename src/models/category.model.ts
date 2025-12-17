@@ -1,5 +1,5 @@
 export interface CategoryModel {
-  id?: string;
+  id: string;
   name: string;
   createdAt?: Date;
 }

@@ -10,7 +10,12 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiEndPoint } from './endPoints';
-import { AllCategoriesResponseModel, CategoryModel, CategoryResponseModel } from 'src/models/category.model';
+import {
+  AllCategoriesResponseModel,
+  CategoryModel,
+  CategoryResponseModel,
+} from 'src/models/category.model';
+import { CreateCustomerPayload, CreateSalePayload, CustomerResponse } from 'src/models/sale.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,42 +23,54 @@ import { AllCategoriesResponseModel, CategoryModel, CategoryResponseModel } from
 export class HttpClientService {
   private http = inject(HttpClient);
 
-  uploadImage =(file: File): Observable<UploadProductResponseModel> =>{
+  uploadImage = (file: File): Observable<UploadProductResponseModel> => {
     const form = new FormData();
     form.append('image', file);
 
-    return this.http.post<UploadProductResponseModel>(
-      ApiEndPoint.upload,
-      form
-    );
-  }
+    return this.http.post<UploadProductResponseModel>(ApiEndPoint.upload, form);
+  };
 
   createProduct = (
     product: ProductDetailsModel
-  ): Observable<ProductDetailsResponseModel>=> {
+  ): Observable<ProductDetailsResponseModel> => {
     return this.http.post<ProductDetailsResponseModel>(
       ApiEndPoint.product,
       product
     );
-  }
+  };
 
   allProducts = (): Observable<AllProductsResponseModel> => {
-    return this.http.get<AllProductsResponseModel>(
-      ApiEndPoint.product
-    );
-  }
-  deleteProduct =(id: string)=> {
+    return this.http.get<AllProductsResponseModel>(ApiEndPoint.product);
+  };
+  deleteProduct = (id: string) => {
     return this.http.delete(`${ApiEndPoint.product}/${id}`);
-  }
+  };
 
-  createCategory = (category: CategoryModel):Observable<CategoryResponseModel> => {
-    return this.http.post<CategoryResponseModel>(`${ApiEndPoint.createCategory}`, category);
-  }
+  createCategory = (
+    category: CategoryModel
+  ): Observable<CategoryResponseModel> => {
+    return this.http.post<CategoryResponseModel>(
+      `${ApiEndPoint.createCategory}`,
+      category
+    );
+  };
 
-  allCategories = () : Observable<AllCategoriesResponseModel> => {
-    return this.http.get<AllCategoriesResponseModel>(`${ApiEndPoint.allCategories}`);
-  }
+  allCategories = (): Observable<AllCategoriesResponseModel> => {
+    return this.http.get<AllCategoriesResponseModel>(
+      `${ApiEndPoint.allCategories}`
+    );
+  };
   deleteCategory = (id: string) => {
     return this.http.delete(`${ApiEndPoint.deleteCategory}/${id}`);
-  }
+  };
+createOrGetCustomer = (customer: CreateCustomerPayload): Observable<CustomerResponse> => {
+  return this.http.post<CustomerResponse>(
+    ApiEndPoint.createOrGetCustomer,
+    customer
+  );
+};
+
+createSale = (payload: CreateSalePayload): Observable<any> => {
+  return this.http.post(ApiEndPoint.createSale, payload);
+};
 }

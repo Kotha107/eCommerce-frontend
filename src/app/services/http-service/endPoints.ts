@@ -8,4 +8,7 @@ export const ApiEndPoint = {
   createCategory: `${environment.BASE_URL}categories`,
   allCategories: `${environment.BASE_URL}categories`,
   deleteCategory: `${environment.BASE_URL}categories`,
+  createSale: `${environment.BASE_URL}sale`,
+  createOrGetCustomer: `${environment.BASE_URL}customer`,
+  
 };

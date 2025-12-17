@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { CartService } from 'src/app/services/cartService/cart.service';
 import { ProductDetailsModel } from 'src/models/product.model';
+import { ModalController } from '@ionic/angular/standalone';
+import { CheckoutModalComponent } from '../checkout-modal/checkout-modal.component';
 
 @Component({
   standalone: true,
@@ -19,9 +21,10 @@ import { ProductDetailsModel } from 'src/models/product.model';
 })
 export class RightSidePanelComponent implements OnInit {
   cartService = inject(CartService);
+  private modalCtrl = inject(ModalController);
+
   @Input() mode!: 'upload' | 'cart';
   @HostBinding('class.panel-open')
-
   cartItems = this.cartService.getCartItems();
   isOpen = this.cartService.getPanelState();
 
@@ -30,7 +33,15 @@ export class RightSidePanelComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
-  
+  async checkout() {
+    const modal = await this.modalCtrl.create({
+      component: CheckoutModalComponent,
+      cssClass: 'checkout-modal',
+    });
+
+    await modal.present();
+  }
+
   get isPanelOpen() {
     let open = false;
     this.isOpen.subscribe((val) => (open = val));
