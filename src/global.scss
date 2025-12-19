@@ -154,3 +154,11 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.product-modal {
+  --width: 85vw;       /* increase width */
+  --max-width: 1100px; /* desktop limit */
+  --height: auto;
+  --border-radius: 20px;
+}
+

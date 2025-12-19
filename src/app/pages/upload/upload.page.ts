@@ -7,12 +7,14 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpClientService } from 'src/app/services/http-service/http-client.service';
-import { AllProductsResponseModel, ProductDetailsModel } from 'src/models/product.model';
+import {
+  AllProductsResponseModel,
+  ProductDetailsModel,
+} from 'src/models/product.model';
+import { IonicModule } from '@ionic/angular';
+import { MatFormField } from '@angular/material/input';
 import { CategoryModel } from 'src/models/category.model';
 import { RightSidePanelComponent } from 'src/app/components/right-side-panel/right-side-panel.component';
-import { MatFormField } from '@angular/material/input';
-import { IonicModule } from '@ionic/angular';
-
 
 @Component({
   selector: 'app-upload',
@@ -21,11 +23,10 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [
     FormsModule,
+    IonicModule,
     ReactiveFormsModule,
     RightSidePanelComponent,
-    MatFormField,
-    IonicModule, 
-],
+  ],
 })
 export class UploadPage implements OnInit {
   private fb = inject(FormBuilder);
@@ -49,7 +50,6 @@ export class UploadPage implements OnInit {
   ngOnInit() {
     this.loadProducts();
     this.loadCategories();
-
   }
 
   onFileSelected(event: any) {
@@ -71,7 +71,7 @@ export class UploadPage implements OnInit {
       this.http.createProduct(productData).subscribe((res) => {
         this.loadProducts();
       });
-      
+
       this.loading = false;
       this.productForm.reset();
       this.selectedFile = null;
@@ -91,19 +91,17 @@ export class UploadPage implements OnInit {
       },
     });
   }
-  loadCategories(){
-    this.http.allCategories().subscribe((res)=>{
-      this.categories=res.data
-    })
-
-  };
-  deleteCategory(id: string){
-    this.http.deleteCategory(id).subscribe({
-      next:()=>{
-        this.categories=this.categories.filter(cat=>cat.id!==id);
-        this.loadCategories();
-      }
-    })
+  loadCategories() {
+    this.http.allCategories().subscribe((res) => {
+      this.categories = res.data;
+    });
   }
-  
+  deleteCategory(id: string) {
+    this.http.deleteCategory(id).subscribe({
+      next: () => {
+        this.categories = this.categories.filter((cat) => cat.id !== id);
+        this.loadCategories();
+      },
+    });
+  }
 }

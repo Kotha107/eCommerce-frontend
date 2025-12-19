@@ -30,9 +30,6 @@ import {
   styleUrls: ['./category.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
-    MatLabel,
-    IonLabel,
     FormsModule,
     MatInputModule,
     MatSelectModule,
