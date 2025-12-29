@@ -13,20 +13,14 @@ import { RightSidePanelComponent } from '../../right-side-panel/right-side-panel
 import { CartService } from 'src/app/services/cartService/cart.service';
 import { map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { getDiscountedPrice } from 'src/app/utils/discount';
 
 @Component({
   selector: 'app-product-modal',
   standalone: true,
-  imports: [
-    IonIcon,
-    IonTitle,
-    IonHeader,
-    IonButton,
-    IonToolbar,
-    IonContent,
-    IonButtons,
-    AsyncPipe,
-  ],
+  imports: [MatInputModule, MatFormFieldModule, AsyncPipe],
   templateUrl: './product-modal.component.html',
   styleUrls: ['./product-modal.component.scss'],
 })
@@ -55,5 +49,8 @@ export class ProductModalComponent implements OnInit {
 
   decreaseQuantity() {
     this.cartService.decreaseCartItem(this.product);
+  }
+  getDiscountedPrice(price: number, discount: number = 0) {
+    return getDiscountedPrice(price, discount);
   }
 }

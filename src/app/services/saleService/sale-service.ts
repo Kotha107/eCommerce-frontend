@@ -17,20 +17,14 @@ export interface CheckoutData {
 export class SaleService {
   private api = inject(HttpClientService);
 
-  /**
-   * Process complete checkout: create/get customer, then create sale
-   */
   processCheckout(checkoutData: CheckoutData): Observable<any> {
-    // Step 1: Create or get customer
     const customerPayload = {
       name: checkoutData.customerName,
       phone: checkoutData.customerPhone,
     };
 
-    // Step 2: Chain the customer creation with sale creation
     return this.api.createOrGetCustomer(customerPayload).pipe(
       switchMap((customerResponse) => {
-        // Step 3: Create sale with customer ID
         const salePayload = {
           customerId: customerResponse.data.id,
           items: checkoutData.items,
@@ -43,16 +37,10 @@ export class SaleService {
     );
   }
 
-  /**
-   * Calculate change amount
-   */
   calculateChange(cashGiven: number, totalAmount: number): number {
     return cashGiven - totalAmount;
   }
 
-  /**
-   * Validate checkout data
-   */
   validateCheckout(
     customerName: string,
     cashGiven: number,
@@ -67,5 +55,9 @@ export class SaleService {
     }
 
     return { valid: true };
+  }
+
+  searchCustomerByPhone(phone: string): Observable<any> {
+    return this.api.searchCustomerByPhone(phone);
   }
 }

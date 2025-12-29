@@ -143,15 +143,45 @@ body {
   overflow-y: auto;
 }
 
-.mat-mdc-form-field,
-.mat-mdc-select,
-.mat-mdc-option,
-.mat-mdc-input-element,
-.mat-mdc-button,
-.mat-mdc-raised-button {
-  font-size: 14px !important;
+/* -------------------------------------------------------------------------- */
+/* UNIVERSAL FIX: REMOVE BROWSER & IONIC FOCUS RECTANGLES                      */
+/* -------------------------------------------------------------------------- */
+
+/* Target every input and textarea inside a Material Form Field */
+.mat-mdc-form-field {
+  
+  /* 1. Remove the browser's default blue/black outline rectangle */
+  .mdc-text-field__input {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* 2. Prevent Ionic from adding its own focus border/underline */
+  input, textarea {
+    --box-shadow: none !important;
+    --border-width: 0 !important;
+    outline: none !important;
+  }
 }
 
+/* 3. Specifically fix the Material "Notch" transition glitches */
+.mdc-notched-outline__notch {
+  /* This prevents the "divider" line appearing inside the green border */
+  border-right: none !important;
+  border-left: none !important;
+}
+
+/* 4. Ensure the green border remains the ONLY visible focus indicator */
+.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: #28c76f !important; /* Your green */
+    border-width: 2px !important;      /* Makes the focus clear */
+  }
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

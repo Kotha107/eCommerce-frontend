@@ -1,11 +1,11 @@
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import {
-  Component,
-  HostBinding,
-  inject,
   Input,
   input,
+  inject,
   OnInit,
+  Component,
+  HostBinding,
 } from '@angular/core';
 import { CartService } from 'src/app/services/cartService/cart.service';
 import { ProductDetailsModel } from 'src/models/product.model';

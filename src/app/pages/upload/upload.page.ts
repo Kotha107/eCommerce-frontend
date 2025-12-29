@@ -8,13 +8,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpClientService } from 'src/app/services/http-service/http-client.service';
 import {
-  AllProductsResponseModel,
   ProductDetailsModel,
+  AllProductsResponseModel,
 } from 'src/models/product.model';
 import { IonicModule } from '@ionic/angular';
-import { MatFormField } from '@angular/material/input';
 import { CategoryModel } from 'src/models/category.model';
 import { RightSidePanelComponent } from 'src/app/components/right-side-panel/right-side-panel.component';
+import { IonIcon } from '@ionic/angular/standalone';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-upload',
@@ -24,6 +26,8 @@ import { RightSidePanelComponent } from 'src/app/components/right-side-panel/rig
   imports: [
     FormsModule,
     IonicModule,
+    MatInputModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
     RightSidePanelComponent,
   ],
@@ -37,12 +41,16 @@ export class UploadPage implements OnInit {
   products: ProductDetailsModel[] = [];
   categories: CategoryModel[] = [];
   imageUrl!: string;
+  isEditMode = false;
+  editingProductId: string | null = null;
   selectedFile: File | null = null;
 
   constructor() {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       price: ['', Validators.required],
+      unit: [''],
+      discountPercent: [0],
       categoryName: [''],
       description: [''],
     });
@@ -55,27 +63,66 @@ export class UploadPage implements OnInit {
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
+  editProduct(product: any) {
+    this.isEditMode = true;
+    this.editingProductId = product.id;
+    this.imageUrl = product.imageUrl; // Keep existing image URL
+
+    this.productForm.patchValue({
+      name: product.name,
+      price: product.price,
+      unit: product.unit,
+      categoryName: product.categoryName || '',
+      discountPercent: product.discountPercent || 0,
+      description: product.description,
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    this.editingProductId = null;
+    this.productForm.reset();
+    this.selectedFile = null;
+  }
 
   upload() {
-    if (!this.selectedFile) return;
     this.loading = true;
 
-    this.http.uploadImage(this.selectedFile).subscribe((res) => {
-      this.imageUrl = res.data.imageUrl;
-
-      const productData = {
-        ...this.productForm.value,
-        imageUrl: this.imageUrl,
-      };
-
-      this.http.createProduct(productData).subscribe((res) => {
-        this.loadProducts();
+    if (this.selectedFile) {
+      this.http.uploadImage(this.selectedFile).subscribe((res) => {
+        this.imageUrl = res.data.imageUrl;
+        this.saveProductData();
       });
+    } else if (this.isEditMode) {
+      this.saveProductData();
+    }
+  }
 
-      this.loading = false;
-      this.productForm.reset();
-      this.selectedFile = null;
-    });
+  private saveProductData() {
+    const productData = {
+      ...this.productForm.value,
+      imageUrl: this.imageUrl,
+    };
+
+    if (this.isEditMode && this.editingProductId) {
+      this.http
+        .updateProduct(this.editingProductId, productData)
+        .subscribe(() => {
+          this.completeAction('Product updated successfully');
+        });
+    } else {
+      this.http.createProduct(productData).subscribe(() => {
+        this.completeAction('Product created successfully');
+      });
+    }
+  }
+
+  private completeAction(message: string) {
+    this.loadProducts();
+    this.loading = false;
+    this.cancelEdit();
   }
   loadProducts() {
     this.http.allProducts().subscribe((res: AllProductsResponseModel) => {

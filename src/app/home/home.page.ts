@@ -2,16 +2,19 @@ import { Component, inject } from '@angular/core';
 import {
   IonTitle,
   IonHeader,
+  IonButton,
   IonToolbar,
   IonContent,
-  ModalController,
   IonButtons,
-  IonButton,
+  ModalController,
 } from '@ionic/angular/standalone';
 
 import { CartService } from '../services/cartService/cart.service';
 import { HttpClientService } from '../services/http-service/http-client.service';
-import {AllProductsResponseModel, ProductDetailsModel,} from 'src/models/product.model';
+import {
+  AllProductsResponseModel,
+  ProductDetailsModel,
+} from 'src/models/product.model';
 import { ProductModalComponent } from '../components/product/product-modal/product-modal.component';
 import { RightSidePanelComponent } from '../components/right-side-panel/right-side-panel.component';
 import { CategoryModel } from 'src/models/category.model';
@@ -23,10 +26,10 @@ import { CategoryModel } from 'src/models/category.model';
   imports: [
     IonTitle,
     IonHeader,
+    IonButton,
     IonToolbar,
     IonContent,
     IonButtons,
-    IonButton,
     RightSidePanelComponent,
   ],
 })

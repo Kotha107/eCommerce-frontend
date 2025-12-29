@@ -1,8 +1,10 @@
 export interface ProductDetailsModel {
   id: string;
-  categoryId : string;
+  categoryId? : string;
   name: string;
   price: number;
+  unit: string;
+  discountPercent?: number;
   category: string;
   description?: string;
   imageUrl: string;

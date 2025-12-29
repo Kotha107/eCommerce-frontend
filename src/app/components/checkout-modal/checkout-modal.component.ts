@@ -3,15 +3,23 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular/standalone';
 import { DecimalPipe } from '@angular/common';
 import { CartService } from 'src/app/services/cartService/cart.service';
-import { SaleItem } from 'src/models/sale.model';
+import { CustomerModel, CustomerResponse, SaleItem } from 'src/models/sale.model';
 import { SaleService } from 'src/app/services/saleService/sale-service';
+import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   standalone: true,
   selector: 'app-checkout-modal',
   templateUrl: './checkout-modal.component.html',
   styleUrls: ['./checkout-modal.component.scss'],
-  imports: [ReactiveFormsModule, DecimalPipe],
+  imports: [
+    ReactiveFormsModule,
+    DecimalPipe,
+    MatInputModule,
+    MatFormFieldModule,
+  ],
 })
 export class CheckoutModalComponent implements OnInit {
   private modalCtrl = inject(ModalController);
@@ -23,7 +31,8 @@ export class CheckoutModalComponent implements OnInit {
   total$ = this.cartService.getTotalAmount();
 
   totalAmount = 0;
-  isProcessing = false; // Add loading state
+  suggestedCustomer: CustomerModel | null = null;
+  isProcessing = false;
 
   checkoutForm = this.fb.group({
     name: ['', Validators.required],
@@ -35,6 +44,39 @@ export class CheckoutModalComponent implements OnInit {
     this.total$.subscribe((total) => {
       this.totalAmount = total;
     });
+
+    this.checkoutForm
+      .get('phone')
+      ?.valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((phone) => {
+          if (phone && phone.length >= 3) {
+            return this.salesService.searchCustomerByPhone(phone);
+          }
+          return of(null);
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res && res.success) {
+            this.suggestedCustomer = res.data;
+          } else {
+            this.suggestedCustomer = null;
+          }
+        },
+        error: () => (this.suggestedCustomer = null),
+      });
+  }
+
+  selectSuggestion() {
+    if (this.suggestedCustomer) {
+      this.checkoutForm.patchValue({
+        name: this.suggestedCustomer.name,
+        phone: this.suggestedCustomer.phone,
+      });
+      this.suggestedCustomer = null;
+    }
   }
 
   async confirmSale() {
@@ -55,16 +97,21 @@ export class CheckoutModalComponent implements OnInit {
 
     // Prepare cart items
     const items: SaleItem[] = [];
-    this.cartItems$.subscribe(cart => {
-      cart.forEach(item => {
-        items.push({
-          productId: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
+    this.cartItems$
+      .subscribe((cart) => {
+        cart.forEach((item) => {
+          items.push({
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            unit: item.unit,
+            discountPercent: item.discountPercent,
+            finalPrice: item.finalPrice,
+            quantity: item.quantity,
+          });
         });
-      });
-    }).unsubscribe();
+      })
+      .unsubscribe();
 
     // Process checkout using service
     this.isProcessing = true;

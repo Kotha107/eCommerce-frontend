@@ -23,30 +23,46 @@ export class CartService {
   }
 
   //  Calculate Total
-  private calculateTotal(items: CartItem[]) {
-    const total = items.reduce((sum, item) => {
-      return sum + (Number(item.price) * item.quantity);
-    }, 0);
+  calculateTotal(items: CartItem[]) {
+    const total = items.reduce(
+      (sum, item) => sum + item.finalPrice * item.quantity,
+      0
+    );
+
     this.totalAmount.next(total);
   }
 
   addCartItem(product: ProductDetailsModel) {
     const currentItems = this.cartItems.value;
+
     const existingItem = currentItems.find((item) => item.id === product.id);
+
+    const discount = product.discountPercent || 0;
+    const finalPrice = product.price - (product.price * discount) / 100;
 
     if (existingItem) {
       existingItem.quantity += 1;
-      this.cartItems.next([...currentItems]); 
     } else {
-      const newItem: CartItem = { ...product, quantity: 1 };
-      this.cartItems.next([...currentItems, newItem]);
+      const newItem: CartItem = {
+        id: product.id!,
+        categoryId: product.categoryId!,
+        category: product.category!,
+        name: product.name,
+        price: product.price,
+        unit: product.unit,
+        discountPercent: discount,
+        finalPrice: Math.round(finalPrice),
+        quantity: 1,
+        imageUrl: product.imageUrl,
+      };
+
+      currentItems.push(newItem);
     }
-    
-    
-    this.calculateTotal(this.cartItems.value);
+
+    this.cartItems.next([...currentItems]);
+    this.calculateTotal(currentItems);
     this.panelOpenState.next(true);
   }
-
 
   removeCartItem(product: ProductDetailsModel) {
     const currentItems = this.cartItems.value;
@@ -55,7 +71,6 @@ export class CartService {
     this.cartItems.next(updatedItems);
     this.calculateTotal(updatedItems);
   }
-
 
   decreaseCartItem(product: ProductDetailsModel) {
     const currentItems = this.cartItems.value;
@@ -67,7 +82,7 @@ export class CartService {
         this.cartItems.next([...currentItems]);
       } else {
         this.removeCartItem(product);
-        return; 
+        return;
       }
       this.calculateTotal(this.cartItems.value);
     }

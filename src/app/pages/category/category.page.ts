@@ -32,7 +32,6 @@ import {
   imports: [
     FormsModule,
     MatInputModule,
-    MatSelectModule,
     MatFormFieldModule,
     ReactiveFormsModule,
   ],
@@ -40,10 +39,12 @@ import {
 export class CategoryPage implements OnInit {
   private http = inject(HttpClientService);
   private fb = inject(FormBuilder);
-  
+
   categories: CategoryModel[] = [];
   categoryForm: FormGroup;
   loading = false;
+  isEditMode = false;
+  editingCategoryId: string | null = null;
 
   constructor() {
     this.categoryForm = this.fb.group({
@@ -67,28 +68,52 @@ export class CategoryPage implements OnInit {
     });
   }
 
-  createCategory() {
+  editCategory(category: CategoryModel) {
+    this.isEditMode = true;
+    this.editingCategoryId = category.id!;
+    this.categoryForm.patchValue({
+      name: category.name,
+    });
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    this.editingCategoryId = null;
+    this.categoryForm.reset();
+  }
+  saveCategory() {
     if (this.categoryForm.invalid) {
-      alert('Please enter a valid category name (at least 2 characters)');
+      alert('Please enter a valid category name');
       return;
     }
 
     this.loading = true;
     const categoryData = this.categoryForm.value;
 
-    this.http.createCategory(categoryData).subscribe({
-      next: (res: CategoryResponseModel) => {
-        this.loading = false;
-        this.categoryForm.reset();
-        this.loadCategories();
-        alert('Category created successfully!');
-      },
-      error: (err) => {
-        this.loading = false;
-        console.error('Failed to create category:', err);
-        alert('Failed to create category');
-      },
-    });
+    if (this.isEditMode && this.editingCategoryId) {
+      this.http.updateCategory(this.editingCategoryId, categoryData).subscribe({
+        next: () => this.finalizeAction('Category updated successfully!'),
+        error: (err) => this.handleError(err, 'update'),
+      });
+    } else {
+      this.http.createCategory(categoryData).subscribe({
+        next: () => this.finalizeAction('Category created successfully!'),
+        error: (err) => this.handleError(err, 'create'),
+      });
+    }
+  }
+
+  private finalizeAction(message: string) {
+    this.loading = false;
+    alert(message);
+    this.cancelEdit();
+    this.loadCategories();
+  }
+
+  private handleError(err: any, action: string) {
+    this.loading = false;
+    console.error(`Failed to ${action} category:`, err);
+    alert(`Failed to ${action} category`);
   }
 
   deleteCategory(id: string) {

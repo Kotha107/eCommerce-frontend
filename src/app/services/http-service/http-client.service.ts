@@ -15,7 +15,12 @@ import {
   CategoryModel,
   CategoryResponseModel,
 } from 'src/models/category.model';
-import { CreateCustomerPayload, CreateSalePayload, CustomerResponse } from 'src/models/sale.model';
+import {
+  CreateCustomerPayload,
+  CreateSalePayload,
+  CreateSaleResponse,
+  CustomerResponse,
+} from 'src/models/sale.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +50,15 @@ export class HttpClientService {
   deleteProduct = (id: string) => {
     return this.http.delete(`${ApiEndPoint.product}/${id}`);
   };
+  updateProduct = (
+    id: string,
+    product: ProductDetailsModel
+  ): Observable<ProductDetailsResponseModel> => {
+    return this.http.put<ProductDetailsResponseModel>(
+      `${ApiEndPoint.product}/${id}`,
+      product
+    );
+  };
 
   createCategory = (
     category: CategoryModel
@@ -63,14 +77,29 @@ export class HttpClientService {
   deleteCategory = (id: string) => {
     return this.http.delete(`${ApiEndPoint.deleteCategory}/${id}`);
   };
-createOrGetCustomer = (customer: CreateCustomerPayload): Observable<CustomerResponse> => {
-  return this.http.post<CustomerResponse>(
-    ApiEndPoint.createOrGetCustomer,
-    customer
+  updateCategory = (id: string, category: CategoryModel): Observable<CategoryResponseModel> => {
+  return this.http.put<CategoryResponseModel>(
+    `${ApiEndPoint.allCategories}/${id}`, 
+    category
   );
 };
+  createOrGetCustomer = (
+    customer: CreateCustomerPayload
+  ): Observable<CustomerResponse> => {
+    return this.http.post<CustomerResponse>(
+      ApiEndPoint.createOrGetCustomer,
+      customer
+    );
+  };
 
-createSale = (payload: CreateSalePayload): Observable<any> => {
-  return this.http.post(ApiEndPoint.createSale, payload);
-};
+  createSale = (payload: CreateSalePayload): Observable<CreateSaleResponse> => {
+    return this.http.post<CreateSaleResponse>(ApiEndPoint.createSale, payload);
+  };
+  searchCustomerByPhone = (phone: string): Observable<CustomerResponse> => {
+    return this.http.get<CustomerResponse>(
+      `${ApiEndPoint.searchCustomerByPhone}?phone=${phone}`
+    );
+  };
 }
+
+
